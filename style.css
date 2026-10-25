@@ -1,7 +1,8 @@
 body {
-    font-family: Arial, sans-serif;
+    background: red !important;
 }
+
 nav {
-        background: #000;
-        color: #fff;
-    }
+    background: black;
+    color: white;
+}
