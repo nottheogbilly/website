@@ -1,14 +1,115 @@
 <!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Billy² · Home</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    .nav-link {
+      transition: opacity 0.2s ease;
+    }
+    .nav-link:hover {
+      opacity: 0.75;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-white text-black dark:bg-[#0d0f12] dark:text-white transition-colors duration-200 antialiased">
 
-<html>
-  <head>
-    <title>Billy²</title>
-    <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-    <nav>
-      <p>This is a test of the navbar.</p>
-    </nav>
-    <p>This IS NOT in the navbar.</p>
-  </body>
+  <header class="w-full bg-black text-white px-4 sm:px-8 py-2.5 flex flex-row justify-between items-center border-b border-zinc-800 shrink-0 select-none">
+    <a href="https://nottheogbily.qzz.io/" class="text-2xl sm:text-3xl font-black tracking-tight text-white hover:opacity-90 transition-opacity flex items-center">
+      Billy<sup class="text-base sm:text-lg font-bold ml-0.5">2</sup>
+    </a>
+    <div class="flex items-center space-x-3 sm:space-x-5">
+      <nav class="flex items-center space-x-2 sm:space-x-3 text-lg sm:text-xl font-normal text-white">
+        <a href="https://github.com/nottheogbilly" target="_blank" rel="noopener noreferrer" class="nav-link">Github</a>
+        <span class="text-zinc-500 select-none">·</span>
+        <a href="https://nottheogbily.qzz.io/files" class="nav-link">Files</a>
+        <span class="text-zinc-500 select-none">·</span>
+        <a href="https://nottheogbily.qzz.io/socials" class="nav-link">Socials</a>
+      </nav>
+      <button id="theme-toggle" type="button" aria-label="Toggle Theme" class="p-1.5 rounded-lg text-gray-300 hover:text-white hover:bg-zinc-800 focus:outline-none transition-colors">
+        <!-- Sun Icon (shown in dark mode) -->
+        <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+        </svg>
+        <!-- Moon Icon (shown in light mode) -->
+        <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero Container -->
+  <main class="w-full flex-grow px-6 sm:px-12 pt-8 sm:pt-12 pb-16 flex items-start justify-start">
+    <div class="flex flex-row items-center gap-6 sm:gap-8">
+      
+      <!-- Circle PFP Avatar on Left -->
+      <div id="pfp-container" class="shrink-0 flex items-center justify-center w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-black border-[4px] sm:border-[5px] border-[#2563eb] shadow-xl relative overflow-hidden select-none">
+        <img 
+          src="https://nottheogbily.qzz.io/assets/pfp.png" 
+          alt="Profile Picture" 
+          class="w-full h-full object-cover"
+          onerror="this.onerror=null; this.remove(); document.getElementById('pfp-fallback').classList.remove('hidden');"
+        />
+        <span id="pfp-fallback" class="hidden text-white text-5xl sm:text-6xl font-black tracking-tight leading-none flex items-baseline">
+          B<sup class="text-3xl sm:text-4xl font-bold ml-0.5 -translate-y-3 sm:-translate-y-4">2</sup>
+        </span>
+      </div>
+      <div class="flex flex-col justify-center">
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-black dark:text-white tracking-tight leading-none">
+          Welcome to my site!
+        </h1>
+        <p class="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 font-normal mt-2 leading-snug">
+          Where i upload stuff that isnt on youtube!
+        </p>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const darkIcon = document.getElementById('theme-toggle-dark-icon');
+    const lightIcon = document.getElementById('theme-toggle-light-icon');
+
+    const savedTheme = localStorage.getItem('color-theme');
+    const isDark = savedTheme === 'dark' || (!savedTheme && true);
+
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+      lightIcon.classList.remove('hidden');
+    } else {
+      document.documentElement.classList.remove('dark');
+      darkIcon.classList.remove('hidden');
+    }
+
+    themeToggleBtn.addEventListener('click', function() {
+      if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('color-theme', 'light');
+        lightIcon.classList.add('hidden');
+        darkIcon.classList.remove('hidden');
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('color-theme', 'dark');
+        darkIcon.classList.add('hidden');
+        lightIcon.classList.remove('hidden');
+      }
+    });
+  </script>
+</body>
 </html>
