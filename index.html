@@ -75,35 +75,33 @@
   </header>
 
   <!-- Main Content Layout -->
-  <main class="w-full max-w-7xl mx-auto flex-grow px-6 sm:px-12 py-10 sm:py-16">
-    <div class="flex flex-col lg:flex-row items-start gap-10 lg:gap-12">
+  <main class="w-full max-w-[1500px] mx-auto flex-grow px-6 sm:px-12 py-10 sm:py-16">
+    <div class="flex flex-col lg:flex-row justify-between items-start gap-12 lg:gap-16">
       
-      <!-- LEFT: Hero Section -->
-      <section class="w-full lg:w-1/2 flex flex-col justify-start">
-        <div class="flex flex-col items-start gap-6">
-          <div class="w-28 h-28 sm:w-36 sm:h-36 rounded-full border-4 border-[#3b82f6] flex items-center justify-center bg-[#1a1d24] text-white font-bold text-3xl shrink-0 overflow-hidden shadow-lg">
-            <img
-               src="https://nottheogbilly.qzz.io/assets/pfp.png"
-               alt="Billy²"
-               class="w-full h-full object-cover"
-               onerror="this.style.display='none'; document.getElementById('avatar-fallback').classList.remove('hidden');"
-            />
-            <span id="avatar-fallback" class="hidden text-3xl font-black">b²</span>
-          </div>
-          
-          <div>
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-black dark:text-white mb-3 leading-tight">
-              Welcome to my site!
-            </h1>
-            <p class="text-lg sm:text-xl text-gray-600 dark:text-gray-400 font-normal leading-relaxed">
-              Where i upload stuff that isnt on youtube!
-            </p>
-          </div>
+      <!-- LEFT: Hero Section (Fixed Side-by-side Layout) -->
+      <section class="w-full lg:w-7/12 flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-8 shrink-0">
+        <div class="w-28 h-28 sm:w-36 sm:h-36 rounded-full border-4 border-[#3b82f6] flex items-center justify-center bg-[#1a1d24] text-white font-bold text-3xl shrink-0 overflow-hidden shadow-lg">
+          <img
+             src="https://nottheogbilly.qzz.io/assets/pfp.png"
+             alt="Billy²"
+             class="w-full h-full object-cover"
+             onerror="this.style.display='none'; document.getElementById('avatar-fallback').classList.remove('hidden');"
+          />
+          <span id="avatar-fallback" class="hidden text-3xl font-black">b²</span>
+        </div>
+        
+        <div class="flex flex-col justify-center">
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-black dark:text-white mb-2 leading-tight">
+            Welcome to my site!
+          </h1>
+          <p class="text-lg sm:text-xl text-gray-600 dark:text-gray-400 font-normal leading-relaxed">
+            Where i upload stuff that isnt on youtube!
+          </p>
         </div>
       </section>
 
-      <!-- RIGHT: Updates Box -->
-      <aside class="w-full lg:w-1/2">
+      <!-- RIGHT: Updates Box (Pushed to the corner) -->
+      <aside class="w-full lg:w-4/12 ml-auto">
         <div class="p-5 sm:p-6 rounded-xl bg-gray-50 dark:bg-[#12141a] border border-black/10 dark:border-white/10 shadow-sm">
           <div class="flex items-center justify-between pb-3 mb-3 border-b border-black/10 dark:border-white/10">
             <h2 class="text-xs font-extrabold text-black dark:text-white uppercase tracking-wider">
@@ -158,7 +156,7 @@
       }
     });
 
-    // Custom format parser for markdown headings & bulleted items
+    // Custom format parser supporting both -- and * bullet formats
     function renderCustomLog(text) {
       const lines = text.split('\n');
       let html = '<div class="space-y-4">';
@@ -172,12 +170,13 @@
             inList = false;
           }
           html += `<h2 class="text-base font-bold text-black dark:text-white mt-4 mb-2">${trimmed.substring(2)}</h2>`;
-        } else if (trimmed.startsWith('--')) {
+        } else if (trimmed.startsWith('--') || trimmed.startsWith('* ')) {
           if (!inList) {
             html += '<ul class="list-disc pl-5 space-y-1 text-sm text-gray-600 dark:text-gray-400">';
             inList = true;
           }
-          html += `<li>${trimmed.substring(2).trim()}</li>`;
+          const bulletText = trimmed.startsWith('--') ? trimmed.substring(2).trim() : trimmed.substring(2).trim();
+          html += `<li>${bulletText}</li>`;
         } else if (trimmed) {
           if (inList) {
             html += '</ul>';
@@ -194,7 +193,7 @@
       return html;
     }
 
-    // Dynamic Markdown Fetcher with local & remote fallback
+    // Dynamic Markdown Fetcher
     async function fetchUpdateLog() {
       const container = document.getElementById('updatelog-container');
       const endpoints = [
