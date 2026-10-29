@@ -4,18 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Billy² · Home</title>
-  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       darkMode: 'class'
     }
   </script>
-  
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
     body {
@@ -28,50 +25,40 @@
       opacity: 0.75;
       text-decoration: underline;
     }
-    /* Custom prose styles for markdown update log */
+    /* Custom styling for update log content */
     .md-content h1, .md-content h2, .md-content h3 {
       font-weight: 800;
       letter-spacing: -0.025em;
       margin-top: 1rem;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.375rem;
+      color: #ffffff;
     }
-    .md-content h1 { font-size: 1.25rem; }
-    .md-content h2 { font-size: 1.1rem; }
-    .md-content h3 { font-size: 1rem; }
+    .md-content h1 { font-size: 1.125rem; }
+    .md-content h2 { font-size: 1rem; }
     .md-content ul {
       list-style-type: disc;
       padding-left: 1.25rem;
-      margin-top: 0.375rem;
+      margin-top: 0.25rem;
       margin-bottom: 0.75rem;
     }
     .md-content li {
       margin-bottom: 0.25rem;
       font-size: 0.875rem;
-      line-height: 1.4;
-    }
-    .md-content p {
-      margin-bottom: 0.5rem;
-      font-size: 0.875rem;
       line-height: 1.5;
+      color: #9ca3af;
     }
-    .md-content code {
-      font-size: 0.75rem;
-      padding: 0.125rem 0.375rem;
-      border-radius: 0.375rem;
-      background-color: rgba(255,255,255,0.1);
+    .html-dark .md-content li {
+      color: #9ca3af;
     }
   </style>
 </head>
 <body class="min-h-screen flex flex-col bg-white text-black dark:bg-[#0d0f12] dark:text-white transition-colors duration-200 antialiased">
-
   
+  <!-- Header / Top Bar -->
   <header class="w-full bg-black text-white px-4 sm:px-8 py-2.5 flex flex-row justify-between items-center border-b border-zinc-800 shrink-0 select-none sticky top-0 z-50">
-    
     <a href="https://nottheogbilly.qzz.io/" class="text-2xl sm:text-3xl font-black tracking-tight text-white hover:opacity-90 transition-opacity flex items-center">
       Billy<sup class="text-base sm:text-lg font-bold ml-0.5">2</sup>
     </a>
-
-    
     <div class="flex items-center space-x-3 sm:space-x-5">
       <nav class="flex items-center space-x-2 sm:space-x-3 text-lg sm:text-xl font-normal text-white">
         <a href="https://github.com/nottheogbilly" target="_blank" rel="noopener noreferrer" class="nav-link">Github</a>
@@ -81,13 +68,10 @@
         <a href="https://nottheogbilly.qzz.io/socials" class="nav-link">Socials</a>
       </nav>
 
-      
       <button id="theme-toggle" type="button" aria-label="Toggle Theme" class="p-1.5 rounded-lg text-gray-300 hover:text-white hover:bg-zinc-800 focus:outline-none transition-colors">
-        
         <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
           <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
-        
         <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
           <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
         </svg>
@@ -95,44 +79,50 @@
     </div>
   </header>
 
-  
-  <main class="w-full flex-grow px-6 sm:px-12 py-10 sm:py-16">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+  <!-- Main Content Container (2-Column Layout on Desktop) -->
+  <main class="w-full max-w-7xl mx-auto flex-grow px-6 sm:px-12 py-10 sm:py-16">
+    <div class="flex flex-col lg:flex-row items-start gap-10 lg:gap-12">
       
-      
-      <section class="lg:col-span-7 flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-8">
-        <img
-           src="https://nottheogbilly.qzz.io/assets/pfp.png"
-           alt="Billy² profile picture"
-           class="w-32 h-32 sm:w-40 sm:h-40 rounded-full border-4 border-[#3b82f6] object-cover shrink-0"
-           onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'w-32 h-32 sm:w-40 sm:h-40 rounded-full border-4 border-[#3b82f6] flex items-center justify-center shrink-0 bg-black/40 shadow-inner\'><span class=\'text-4xl sm:text-5xl font-black text-white tracking-tighter flex items-center\'>b<sup class=\'text-2xl sm:text-3xl font-extrabold ml-0.5\'>2</sup></span></div>';"
-        />
-        <div class="flex flex-col justify-center">
-          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-black dark:text-white mb-2 leading-tight">
-            Welcome to my site!
-          </h1>
-          <p class="text-lg sm:text-xl text-gray-600 dark:text-gray-400 font-normal leading-relaxed">
-            Where i upload stuff that isnt on youtube!
-          </p>
+      <!-- LEFT COLUMN: Hero Banner -->
+      <section class="w-full lg:w-1/2 flex flex-col justify-start">
+        <div class="flex flex-col items-start gap-6">
+          <div id="avatar-container" class="w-28 h-28 sm:w-36 sm:h-36 rounded-full border-4 border-[#3b82f6] flex items-center justify-center bg-[#1a1d24] text-white font-bold text-3xl shrink-0 overflow-hidden shadow-lg">
+            <img
+               src="https://nottheogbilly.qzz.io/assets/pfp.png"
+               alt="Billy²"
+               class="w-full h-full object-cover"
+               onerror="this.style.display='none'; document.getElementById('avatar-fallback').classList.remove('hidden');"
+            />
+            <span id="avatar-fallback" class="hidden text-3xl font-black">b²</span>
+          </div>
+          
+          <div>
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-black dark:text-white mb-3 leading-tight">
+              Welcome to my site!
+            </h1>
+            <p class="text-lg sm:text-xl text-gray-600 dark:text-gray-400 font-normal leading-relaxed">
+              Where i upload stuff that isnt on youtube!
+            </p>
+          </div>
         </div>
       </section>
 
-      
-      <aside class="lg:col-span-5 w-full">
-        <div class="p-5 rounded-xl bg-gray-100 dark:bg-[#12141a] border border-black/10 dark:border-white/10">
+      <!-- RIGHT COLUMN: Updates Sidebar Box -->
+      <aside class="w-full lg:w-1/2">
+        <div class="p-5 sm:p-6 rounded-xl bg-gray-50 dark:bg-[#12141a] border border-black/10 dark:border-white/10 shadow-sm">
           <div class="flex items-center justify-between pb-3 mb-3 border-b border-black/10 dark:border-white/10">
-            <h2 class="text-base font-bold text-black dark:text-white uppercase tracking-wider text-xs">
-              Updates
+            <h2 class="text-xs font-extrabold text-black dark:text-white uppercase tracking-wider">
+              UPDATES
             </h2>
-            <span class="text-[11px] text-gray-500 font-mono opacity-70">updatelog.md</span>
+            <span class="text-[11px] text-gray-400 font-mono opacity-60">updatelog.md</span>
           </div>
 
-          
-          <div id="updatelog-container" class="md-content text-gray-600 dark:text-gray-300 text-sm max-h-[400px] overflow-y-auto pr-1">
-            
+          <!-- Dynamic Markdown Render Container -->
+          <div id="updatelog-container" class="md-content text-gray-600 dark:text-gray-300 max-h-[480px] overflow-y-auto pr-2">
+            <!-- Loading State -->
             <div class="flex items-center gap-2 text-xs text-gray-400 py-4">
-              <div class="w-3 h-3 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-              Loading...
+              <div class="w-3.5 h-3.5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+              Loading updates...
             </div>
           </div>
         </div>
@@ -142,8 +132,37 @@
   </main>
 
   <script>
+    // Theme toggle setup
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const darkIcon = document.getElementById('theme-toggle-dark-icon');
+    const lightIcon = document.getElementById('theme-toggle-light-icon');
 
+    const savedTheme = localStorage.getItem('color-theme');
+    const isDark = savedTheme === 'dark' || (!savedTheme && true);
 
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+      lightIcon.classList.remove('hidden');
+    } else {
+      document.documentElement.classList.remove('dark');
+      darkIcon.classList.remove('hidden');
+    }
+
+    themeToggleBtn.addEventListener('click', function() {
+      if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('color-theme', 'light');
+        lightIcon.classList.add('hidden');
+        darkIcon.classList.remove('hidden');
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('color-theme', 'dark');
+        darkIcon.classList.add('hidden');
+        lightIcon.classList.remove('hidden');
+      }
+    });
+
+    // Custom format parser converting markdown headings & double dashes to lists
     function renderCustomLog(text) {
       const lines = text.split('\n');
       let html = '<div class="space-y-4">';
@@ -156,10 +175,10 @@
             html += '</ul>';
             inList = false;
           }
-          html += `<h3 class="font-bold text-base text-black dark:text-white mt-4 mb-2 tracking-tight">${trimmed.substring(2)}</h3>`;
+          html += `<h2 class="text-base font-bold text-black dark:text-white mt-4 mb-2">${trimmed.substring(2)}</h2>`;
         } else if (trimmed.startsWith('--')) {
           if (!inList) {
-            html += '<ul class="list-disc pl-5 space-y-1 text-xs sm:text-sm text-gray-600 dark:text-gray-300">';
+            html += '<ul class="list-disc pl-5 space-y-1 text-sm text-gray-600 dark:text-gray-400">';
             inList = true;
           }
           html += `<li>${trimmed.substring(2).trim()}</li>`;
@@ -168,18 +187,18 @@
             html += '</ul>';
             inList = false;
           }
-          html += `<p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">${trimmed}</p>`;
+          html += `<p class="text-sm text-gray-600 dark:text-gray-400 mb-2">${trimmed}</p>`;
         }
       });
 
       if (inList) {
         html += '</ul>';
       }
-      
       html += '</div>';
       return html;
     }
 
+    // Dynamic Markdown Fetcher
     async function fetchUpdateLog() {
       const container = document.getElementById('updatelog-container');
       const endpoints = [
@@ -198,26 +217,11 @@
             break;
           }
         } catch (e) {
-
+          // Continue fallback
         }
       }
 
-      const defaultMarkdown = `# V 1.0
--- Added some pretty basic links, home, socials and files.
--- Added Some text and styling in the home page. and socials and files
--- Files run on PHP.
--- Added Update Log.
-
-# V 2.0
--- Updated UI
--- Removed Home link.
--- Removed Update Log.
--- Improved Social icons.
--- Files are now hosted via HTML [cause github pages]
--- Files are now being pulled via github.
-
-# V 2.1
--- Added an update log!`;
+      const defaultMarkdown = `# it didnt load, contact **billy@nottheogbilly.qzz.io** to fix it`;
 
       const contentToRender = markdownText || defaultMarkdown;
       container.innerHTML = renderCustomLog(contentToRender);
