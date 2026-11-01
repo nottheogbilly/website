@@ -14,3 +14,6 @@
 
 # V 2.1
 * Added an update log!
+
+# V 2.2
+* Added the projects tab.
