@@ -60,7 +60,7 @@
         if (!response.ok) throw new Error('API request failed');
         const data = await response.json();
         if (data.success === false) throw new Error('API returned failure');
-        const apps = Array.isArray(data) ? data : (data.apps || data.applications || data.data || []);
+        const apps = Array.isArray(data) ? data : (data.applications || data.apps || data.data || []);
         if (!Array.isArray(apps) || apps.length === 0) {
           appsStatus.textContent = 'No applications are published yet.';
           return;
@@ -69,10 +69,12 @@
         appsGrid.innerHTML = apps.map(function(app) {
           const name = typeof app === 'string' ? app : (app.name || app.title || 'Unnamed app');
           const description = typeof app === 'object' ? (app.description || app.summary || 'Application published through the Billy² update service.') : 'Application published through the Billy² update service.';
-          return '<article class="flex flex-col min-h-52 p-5 sm:p-6 rounded-xl bg-gray-50 dark:bg-[#12141a] border border-black/10 dark:border-white/10 shadow-sm"><div class="flex items-center justify-between mb-5"><span class="text-xs font-extrabold uppercase tracking-wider text-blue-500">PXLGrid</span><span class="text-xs font-medium text-gray-500 dark:text-gray-400">App</span></div><h2 class="text-xl font-extrabold tracking-tight mb-2">' + escapeHtml(name) + '</h2><p class="text-sm leading-relaxed text-gray-600 dark:text-gray-400">' + escapeHtml(description) + '</p></article>';
+          const platforms = typeof app === 'object' && Array.isArray(app.platforms) ? app.platforms : [];
+          const slug = typeof app === 'object' ? app.slug : '';
+          return '<article class="flex flex-col min-h-52 p-5 sm:p-6 rounded-xl bg-gray-50 dark:bg-[#12141a] border border-black/10 dark:border-white/10 shadow-sm"><div class="flex items-center justify-between mb-5"><span class="text-xs font-extrabold uppercase tracking-wider text-blue-500">PXLGrid</span><span class="text-xs font-medium text-gray-500 dark:text-gray-400">App</span></div><h2 class="text-xl font-extrabold tracking-tight mb-2">' + escapeHtml(name) + '</h2><p class="text-sm leading-relaxed text-gray-600 dark:text-gray-400">' + escapeHtml(description) + '</p>' + (slug ? '<p class="mt-3 text-xs font-mono text-gray-500 dark:text-gray-400">' + escapeHtml(slug) + '</p>' : '') + (platforms.length ? '<div class="mt-auto pt-5 flex flex-wrap gap-2">' + platforms.map(function(platform) { return '<span class="rounded-full bg-black/5 dark:bg-white/10 px-2.5 py-1 text-xs font-medium text-gray-600 dark:text-gray-300">' + escapeHtml(platform) + '</span>'; }).join('') + '</div>' : '') + '</article>';
         }).join('');
       } catch (error) {
-        appsStatus.textContent = 'Could not load applications. Please try again later.';
+        appsStatus.textContent = error instanceof TypeError ? 'Could not connect to the app service. Check that its API allows requests from this site.' : 'Could not load applications. Please try again later.';
       }
     }
     loadApps();
