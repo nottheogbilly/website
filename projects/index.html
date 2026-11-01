@@ -38,41 +38,44 @@
   </header>
   <main class="w-full max-w-7xl mx-auto flex-grow px-4 sm:px-8 pt-8 sm:pt-12 pb-16">
     <section class="mb-8 sm:mb-10">
-      <p class="text-sm font-bold uppercase tracking-widest text-blue-500 mb-2">Billy²</p>
-      <h1 class="text-4xl sm:text-5xl font-black tracking-tight mb-3">Projects</h1>
-      <p class="max-w-2xl text-base sm:text-lg text-gray-600 dark:text-gray-400 leading-relaxed">A place for things I’m building and making. Replace these starter cards with project details and links when they’re ready.</p>
+      <h1 class="text-4xl sm:text-5xl font-black tracking-tight mb-3">PXLGrid</h1>
+      <p class="max-w-2xl text-base sm:text-lg text-gray-600 dark:text-gray-400 leading-relaxed">Apps and projects from Billy².</p>
     </section>
-    <section aria-label="Project list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-      <article class="flex flex-col min-h-52 p-5 sm:p-6 rounded-xl bg-gray-50 dark:bg-[#12141a] border border-black/10 dark:border-white/10 shadow-sm">
-        <div class="flex items-center justify-between mb-5">
-          <span class="text-xs font-extrabold uppercase tracking-wider text-blue-500">Project 01</span>
-          <span class="text-xs font-medium text-gray-500 dark:text-gray-400">Placeholder</span>
-        </div>
-        <h2 class="text-xl font-extrabold tracking-tight mb-2">Your project name</h2>
-        <p class="text-sm leading-relaxed text-gray-600 dark:text-gray-400">Add a short description of what this project does and what makes it interesting.</p>
-        <div class="mt-auto pt-5 text-xs font-semibold text-gray-500 dark:text-gray-400">Add tags or a project status</div>
-      </article>
-      <article class="flex flex-col min-h-52 p-5 sm:p-6 rounded-xl bg-gray-50 dark:bg-[#12141a] border border-black/10 dark:border-white/10 shadow-sm">
-        <div class="flex items-center justify-between mb-5">
-          <span class="text-xs font-extrabold uppercase tracking-wider text-blue-500">Project 02</span>
-          <span class="text-xs font-medium text-gray-500 dark:text-gray-400">Placeholder</span>
-        </div>
-        <h2 class="text-xl font-extrabold tracking-tight mb-2">Your project name</h2>
-        <p class="text-sm leading-relaxed text-gray-600 dark:text-gray-400">Add a short description of what this project does and what makes it interesting.</p>
-        <div class="mt-auto pt-5 text-xs font-semibold text-gray-500 dark:text-gray-400">Add tags or a project status</div>
-      </article>
-      <article class="flex flex-col min-h-52 p-5 sm:p-6 rounded-xl bg-gray-50 dark:bg-[#12141a] border border-black/10 dark:border-white/10 shadow-sm">
-        <div class="flex items-center justify-between mb-5">
-          <span class="text-xs font-extrabold uppercase tracking-wider text-blue-500">Project 03</span>
-          <span class="text-xs font-medium text-gray-500 dark:text-gray-400">Placeholder</span>
-        </div>
-        <h2 class="text-xl font-extrabold tracking-tight mb-2">Your project name</h2>
-        <p class="text-sm leading-relaxed text-gray-600 dark:text-gray-400">Add a short description of what this project does and what makes it interesting.</p>
-        <div class="mt-auto pt-5 text-xs font-semibold text-gray-500 dark:text-gray-400">Add tags or a project status</div>
-      </article>
-    </section>
-  </main>
+    <section aria-label="PXLGrid applications" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+      <div id="apps-status" role="status" class="col-span-full rounded-xl border border-black/10 dark:border-white/10 bg-gray-50 dark:bg-[#12141a] px-5 py-4 text-sm text-gray-600 dark:text-gray-400">Loading applications…</div>
+      <div id="apps-grid" class="contents"></div>
+    </section>  </main>
   <script>
+
+    const appsGrid = document.getElementById('apps-grid');
+    const appsStatus = document.getElementById('apps-status');
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>"']/g, function(char) {
+        return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char];
+      });
+    }
+    async function loadApps() {
+      try {
+        const response = await fetch('https://ogbloxnot.qzz.io/api/list_apps', {headers:{Accept:'application/json'}});
+        if (!response.ok) throw new Error('API request failed');
+        const data = await response.json();
+        if (data.success === false) throw new Error('API returned failure');
+        const apps = Array.isArray(data) ? data : (data.apps || data.applications || data.data || []);
+        if (!Array.isArray(apps) || apps.length === 0) {
+          appsStatus.textContent = 'No applications are published yet.';
+          return;
+        }
+        appsStatus.classList.add('hidden');
+        appsGrid.innerHTML = apps.map(function(app) {
+          const name = typeof app === 'string' ? app : (app.name || app.title || 'Unnamed app');
+          const description = typeof app === 'object' ? (app.description || app.summary || 'Application published through the Billy² update service.') : 'Application published through the Billy² update service.';
+          return '<article class="flex flex-col min-h-52 p-5 sm:p-6 rounded-xl bg-gray-50 dark:bg-[#12141a] border border-black/10 dark:border-white/10 shadow-sm"><div class="flex items-center justify-between mb-5"><span class="text-xs font-extrabold uppercase tracking-wider text-blue-500">PXLGrid</span><span class="text-xs font-medium text-gray-500 dark:text-gray-400">App</span></div><h2 class="text-xl font-extrabold tracking-tight mb-2">' + escapeHtml(name) + '</h2><p class="text-sm leading-relaxed text-gray-600 dark:text-gray-400">' + escapeHtml(description) + '</p></article>';
+        }).join('');
+      } catch (error) {
+        appsStatus.textContent = 'Could not load applications. Please try again later.';
+      }
+    }
+    loadApps();
     const themeToggleBtn = document.getElementById('theme-toggle');
     const darkIcon = document.getElementById('theme-toggle-dark-icon');
     const lightIcon = document.getElementById('theme-toggle-light-icon');
