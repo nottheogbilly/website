@@ -60,12 +60,10 @@
   <main class="w-full max-w-[1700px] mx-auto flex-grow px-8 sm:px-16 py-12 sm:py-20">
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10 pb-6 border-b border-gray-200 dark:border-zinc-800">
       <div>
-        <h1 class="text-4xl sm:text-5xl font-black tracking-tight text-black dark:text-white mb-2">Projects & Games</h1>
-        <p class="text-gray-600 dark:text-gray-400 text-lg">Apps & updates powered by <code class="text-xs bg-gray-100 dark:bg-zinc-800 px-2 py-1 rounded font-mono">ogbloxnot.qzz.io</code> API</p>
+        <h1 class="text-4xl sm:text-5xl font-black tracking-tight text-black dark:text-white">Projects & Games</h1>
       </div>
-      <button id="refresh-api" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm rounded-lg transition-colors flex items-center gap-2 shadow-sm">
+      <button id="refresh-api" aria-label="Refresh" class="p-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors shadow-sm">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-        Refresh API
       </button>
     </div>
 
@@ -78,7 +76,7 @@
     </div>
   </main>
 
-  <!-- Details & Updates Modal -->
+  <!-- Details Modal -->
   <div id="app-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white dark:bg-[#161922] border border-gray-200 dark:border-zinc-800 rounded-2xl max-w-2xl w-full p-6 sm:p-8 relative shadow-2xl max-h-[90vh] overflow-y-auto">
       <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white p-2 rounded-lg hover:bg-zinc-800">
@@ -151,7 +149,6 @@
         if (!res.ok) throw new Error('Failed to fetch apps');
         const data = await res.json();
         
-        // Exact match for {"status": "success", "apps": [...]}
         const apps = (data && data.status === 'success' && Array.isArray(data.apps)) ? data.apps : [];
 
         if (apps.length === 0) {
@@ -174,8 +171,7 @@
                 <h3 class="text-2xl font-extrabold text-black dark:text-white">${name}</h3>
                 <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-500 font-semibold">${genre}</span>
               </div>
-              <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 font-mono mb-6">
-                <span>Slug: ${slug}</span>
+              <div class="flex items-center text-xs text-gray-500 dark:text-gray-400 font-mono mb-6">
                 ${createdAt ? `<span>Created: ${createdAt}</span>` : ''}
               </div>
             </div>
@@ -250,61 +246,14 @@
             <h2 class="text-3xl font-black text-black dark:text-white mt-1">${app.name}</h2>
           </div>
 
-          <!-- Interactive /api/get_update Tester -->
-          <div class="mb-6 p-4 rounded-xl bg-blue-500/5 border border-blue-500/20">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-blue-500 mb-3">Check Live Updates (/api/get_update)</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-3">
-              <select id="update-platform" class="px-3 py-2 text-xs rounded bg-white dark:bg-zinc-900 border border-gray-300 dark:border-zinc-700 text-black dark:text-white">
-                <option value="windows">Windows</option>
-                <option value="linux">Linux</option>
-                <option value="and32 font-mono">Android (32-bit)</option>
-                <option value="and64 font-mono">Android (64-bit)</option>
-              </select>
-              <input type="text" id="update-version" value="1.0" placeholder="Version (e.g. 1.0)" class="px-3 py-2 text-xs rounded bg-white dark:bg-zinc-900 border border-gray-300 dark:border-zinc-700 text-black dark:text-white">
-              <button onclick="checkAppUpdate('${app.slug}')" class="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded transition-colors">Query API</button>
-            </div>
-            <div id="update-box" class="hidden p-3 rounded bg-white dark:bg-zinc-900 text-xs font-mono border border-black/5 dark:border-white/5"></div>
-          </div>
-
           <div>
             <h3 class="text-sm font-bold uppercase tracking-wider text-black dark:text-white mb-3">All Releases</h3>
             ${releasesHtml}
-          </div>
-
-          <div class="flex justify-end pt-2 border-t border-gray-200 dark:border-zinc-800">
-            <button onclick="closeModal()" class="px-4 py-2 bg-zinc-200 dark:bg-zinc-800 text-black dark:text-white text-sm font-medium rounded-lg">Close</button>
           </div>
         `;
 
       } catch (err) {
         content.innerHTML = `<p class="text-center text-red-500 py-8 font-bold">Failed to load app details.</p>`;
-      }
-    };
-
-    // 3. Query /api/get_update
-    window.checkAppUpdate = async function(slug) {
-      const platform = document.getElementById('update-platform').value;
-      const version = document.getElementById('update-version').value;
-      const box = document.getElementById('update-box');
-
-      box.classList.remove('hidden');
-      box.innerHTML = '<span class="text-gray-400">Querying API...</span>';
-
-      try {
-        const res = await fetch(`${API_BASE}/api/get_update?name=${encodeURIComponent(slug)}&platform=${encodeURIComponent(platform)}&version=${encodeURIComponent(version)}`);
-        const data = await res.json();
-
-        if (data.status === 'success') {
-          const avail = data.update_available ? '<span class="text-green-500 font-bold">Update Available!</span>' : '<span class="text-blue-400 font-bold">Up to date</span>';
-          box.innerHTML = `
-            <div class="mb-2 flex items-center justify-between">${avail} <span class="text-gray-400">Latest: v${data.latest_version}</span></div>
-            ${data.build ? `<a href="${fixUrl(data.build.download_url)}" target="_blank" class="text-blue-500 underline block font-bold mt-1">Download Build (${formatBytes(data.build.file_size)})</a>` : ''}
-          `;
-        } else {
-          box.innerHTML = `<span class="text-red-400">No update data found for this platform/version.</span>`;
-        }
-      } catch (e) {
-        box.innerHTML = `<span class="text-red-500">Failed to query /api/get_update</span>`;
       }
     };
 
