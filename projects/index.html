@@ -132,7 +132,7 @@
       return url.replace('ogbloxnot.qzz.io//', 'ogbloxnot.qzz.io/');
     }
 
-    // 1. Fetch apps list from /api/list_apps
+    // 1. Fetch apps list from /api/list_apps and filter by author "billy"
     async function loadApps() {
       const container = document.getElementById('apps-container');
       container.innerHTML = `
@@ -147,10 +147,16 @@
         if (!res.ok) throw new Error('Failed to fetch apps');
         const data = await res.json();
         
-        const apps = (data && data.status === 'success' && Array.isArray(data.apps)) ? data.apps : [];
+        const rawApps = (data && data.status === 'success' && Array.isArray(data.apps)) ? data.apps : [];
+
+        // Filter for author === "billy" (case-insensitive)
+        const apps = rawApps.filter(app => {
+          const author = (app.author || '').toLowerCase();
+          return author === 'billy';
+        });
 
         if (apps.length === 0) {
-          container.innerHTML = `<div class="col-span-full py-12 text-center text-gray-400">No apps found in API.</div>`;
+          container.innerHTML = `<div class="col-span-full py-12 text-center text-gray-400">No projects found by billy.</div>`;
           return;
         }
 
