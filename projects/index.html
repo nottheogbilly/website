@@ -57,11 +57,9 @@
   </header>
 
   <!-- Main Container -->
-  <main class="w-full max-w-[1700px] mx-auto flex-grow px-8 sm:px-16 py-12 sm:py-20">
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10 pb-6 border-b border-gray-200 dark:border-zinc-800">
-      <div>
-        <h1 class="text-4xl sm:text-5xl font-black tracking-tight text-black dark:text-white">Projects & Games</h1>
-      </div>
+  <main class="w-full max-w-[1700px] mx-auto flex-grow px-8 sm:px-16 py-10 sm:py-14">
+    <div class="flex flex-row justify-between items-center mb-8 pb-4 border-b border-gray-200 dark:border-zinc-800">
+      <h1 class="text-4xl sm:text-5xl font-black tracking-tight text-black dark:text-white">Projects</h1>
       <button id="refresh-api" aria-label="Refresh" class="p-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors shadow-sm">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
       </button>
@@ -161,6 +159,7 @@
           const name = app.name || app.slug || 'Unknown App';
           const slug = app.slug || '';
           const genre = app.genre || 'Game';
+          const author = app.author || '';
           const createdAt = app.created_at ? new Date(app.created_at).toLocaleDateString() : '';
 
           const card = document.createElement('div');
@@ -171,7 +170,8 @@
                 <h3 class="text-2xl font-extrabold text-black dark:text-white">${name}</h3>
                 <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-500 font-semibold">${genre}</span>
               </div>
-              <div class="flex items-center text-xs text-gray-500 dark:text-gray-400 font-mono mb-6">
+              <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 font-mono mb-6">
+                ${author ? `<span>By: ${author}</span>` : ''}
                 ${createdAt ? `<span>Created: ${createdAt}</span>` : ''}
               </div>
             </div>
