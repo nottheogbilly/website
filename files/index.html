@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Billy² - Files</title>
+	<meta property="og:site_name" content="Billy²">
+
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "WebSite",
+		"name": "Billy²",
+		"alternateName": "BillySquared",
+		"url": "https://nottheogbilly.qzz.io/"
+	}
+	</script>
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital@0;1&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+	<nav class="navbar">
+		<a href="index.html" class="logo">Squared</a>
+		<ul class="nav-links">
+			<li><a href="/">Home</a></li>
+			<li><a href="/about">About</a></li>
+			<li><a href="/files">Files</a></li>
+		</ul>
+	</nav>
+
+	<div class="files-container">
+		<h1>Files</h1>
+
+		<p>Files, i guess.</p>
+
+		<div id="file-list"></div>
+	</div>
+
+	<script>
+		const API = "https://api.github.com/repos/nottheogbilly/website-files/git/trees/main?recursive=1";
+		const RAW = "https://raw.githubusercontent.com/nottheogbilly/website-files/main/";
+
+		let files = [];
+		let currentPath = "";
+
+		const list = document.getElementById("file-list");
+
+		async function loadFiles() {
+			try {
+				const response = await fetch(API);
+
+				if (!response.ok) {
+					throw new Error("github returned " + response.status);
+				}
+
+				const data = await response.json();
+
+				if (data.truncated) {
+					throw new Error("repo too big.");
+				}
+
+				files = data.tree.filter(file => file.type === "blob");
+
+				renderDirectory();
+			} catch (error) {
+				list.textContent = "failed to load " + error.message;
+			}
+		}
+
+		function renderDirectory() {
+			list.replaceChildren();
+
+			const prefix = currentPath ? currentPath + "/" : "";
+			const entries = new Map();
+
+			for (const file of files) {
+				if (!file.path.startsWith(prefix)) continue;
+
+				const remaining = file.path.slice(prefix.length);
+				const parts = remaining.split("/");
+				const name = parts[0];
+
+				if (parts.length > 1) {
+					entries.set(name, {
+						name,
+						directory: true
+					});
+				} else {
+					entries.set(name, {
+						name,
+						path: file.path,
+						size: file.size,
+						directory: false
+					});
+				}
+			}
+
+			if (currentPath) {
+				const back = document.createElement("div");
+				back.className = "file-item file-directory";
+
+				const icon = document.createElement("span");
+				icon.className = "file-icon";
+				icon.textContent = "📁";
+
+				const name = document.createElement("span");
+				name.className = "file-name";
+				name.textContent = "..";
+
+				back.append(icon, name);
+
+				back.onclick = () => {
+					currentPath = currentPath.split("/").slice(0, -1).join("/");
+					renderDirectory();
+				};
+
+				list.appendChild(back);
+			}
+
+			const sorted = [...entries.values()].sort((a, b) => {
+				if (a.directory !== b.directory) {
+					return a.directory ? -1 : 1;
+				}
+
+				return a.name.localeCompare(b.name);
+			});
+
+			if (!sorted.length) {
+				list.textContent = currentPath
+					? "this is empty."
+					: "this is empty";
+
+				return;
+			}
+
+			sorted.forEach(createFileEntry);
+		}
+
+		function createFileEntry(entry) {
+			const item = document.createElement("div");
+			item.className = "file-item";
+
+			if (entry.directory) {
+				item.classList.add("file-directory");
+			}
+
+			const icon = document.createElement("span");
+			icon.className = "file-icon";
+			icon.textContent = entry.directory ? "📁" : "📄";
+
+			const name = document.createElement("span");
+			name.className = "file-name";
+			name.textContent = entry.name;
+
+			item.append(icon, name);
+
+			if (entry.directory) {
+				item.onclick = () => {
+					currentPath = currentPath
+						? currentPath + "/" + entry.name
+						: entry.name;
+
+					renderDirectory();
+				};
+			} else {
+				const size = document.createElement("span");
+				size.className = "file-size";
+				size.textContent = formatSize(entry.size);
+
+				item.appendChild(size);
+
+				item.onclick = () => {
+					window.open(
+						RAW + entry.path.split("/")
+							.map(encodeURIComponent)
+							.join("/"),
+						"_blank",
+						"noopener,noreferrer"
+					);
+				};
+			}
+
+			list.appendChild(item);
+		}
+
+		function formatSize(bytes) {
+			if (bytes < 1024) return bytes + " B";
+			if (bytes < 1048576) return (bytes / 1024).toFixed(1) + " KB";
+			return (bytes / 1048576).toFixed(1) + " MB";
+		}
+
+		loadFiles();
+	</script>
+</body>
+</html>
