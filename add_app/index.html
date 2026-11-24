@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Billy² - APP</title>
+	<meta property="og:site_name" content="Billy²" />
+
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "WebSite",
+		"name": "Billy²",
+		"alternateName": "BillySquared",
+		"url": "https://nottheogbilly.qzz.io/"
+	}
+	</script>
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital@0;1&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<nav class="navbar">
+  		<a href="index.html" class="logo">Squared</a>
+  			<ul class="nav-links">
+			<li><a href="/">Home</a></li>
+			<li><a href="/about">About</a></li>
+			<li><a href="/files">Files</a></li>
+  			</ul>
+	</nav>
+	<h1>Add App</h1>
+	<p></p>
+	<p>Inorder to add the app, you must guess the password</p>
+	 <form id="passwordForm">
+        <input
+            type="password"
+            id="password"
+            placeholder="Enter password"
+            required
+            autocomplete="current-password"
+        >
+
+        <button type="submit">Continue</button>
+    </form>
+
+    <p id="status" role="status"></p>
+
+    <script>
+        const API_URL = "https://ogbloxnot.qzz.io/verify";
+
+        const form = document.getElementById("passwordForm");
+        const status = document.getElementById("status");
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const password =
+                document.getElementById("password").value;
+
+            status.textContent = "Checking password...";
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ password })
+                });
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    status.textContent =
+                        result.error || "Incorrect password.";
+                    return;
+                }
+
+                if (
+                    typeof result.url !== "string" ||
+                    !result.url.startsWith("https://")
+                ) {
+                    status.textContent = "Invalid redirect URL.";
+                    return;
+                }
+
+                status.textContent = "Password accepted!";
+                window.location.assign(result.url);
+
+            } catch (error) {
+                status.textContent =
+                    "Could not connect to the API.";
+                console.error(error);
+            }
+        });
+    </script>
+</body>
+</html>
